@@ -1,4 +1,4 @@
-(function() {
+(function () {
   // --- Translations ---
   const translations = {
     az: {
@@ -14,6 +14,7 @@
       findingDriver: "Sürücü axtarılır...",
       driverFound: "Sürücü tapıldı!",
       arrivingIn: "Çatacaq:",
+      scheduledFor: "Təyin olundu:",
       min: "dəq",
       close: "✕",
       azn: "AZN"
@@ -31,6 +32,7 @@
       findingDriver: "Поиск водителя...",
       driverFound: "Водитель найден!",
       arrivingIn: "Прибудет через:",
+      scheduledFor: "Назначено на:",
       min: "мин",
       close: "✕",
       azn: "AZN"
@@ -48,6 +50,7 @@
       findingDriver: "Finding driver...",
       driverFound: "Driver found!",
       arrivingIn: "Arriving in:",
+      scheduledFor: "Scheduled for:",
       min: "min",
       close: "✕",
       azn: "AZN"
@@ -70,7 +73,7 @@
   let currentLang = 'en';
   if (browserLang.startsWith('az')) currentLang = 'az';
   else if (browserLang.startsWith('ru')) currentLang = 'ru';
-  
+
   const t = translations[currentLang];
 
   // --- CSS Injection ---
@@ -97,17 +100,18 @@
       transform: translateY(0);
     }
     .st-header {
-      background: linear-gradient(135deg, #004b87, #0056b3);
+      background: #6a2a5b; /* Baku Taxi Purple */
       color: white;
       padding: 16px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 2px solid #F4AC10;
     }
     .st-header h3 {
       margin: 0;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -211,7 +215,7 @@
     }
     .st-btn {
       width: 100%;
-      background: #0056b3;
+      background: #6a2a5b;
       color: white;
       border: none;
       padding: 14px;
@@ -222,7 +226,7 @@
       transition: background 0.2s;
     }
     .st-btn:hover {
-      background: #004b87;
+      background: #542048;
     }
     
     /* Loading state */
@@ -237,7 +241,7 @@
       width: 40px;
       height: 40px;
       border: 4px solid #f1f5f9;
-      border-top: 4px solid #0056b3;
+      border-top: 4px solid #F4AC10;
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin-bottom: 16px;
@@ -288,7 +292,7 @@
       color: #1e293b;
     }
     .st-eta-box {
-      background: #004b87;
+      background: #6a2a5b;
       color: white;
       text-align: center;
       padding: 10px;
@@ -312,12 +316,13 @@
 
   // --- Core Logic ---
   function renderStep1(data) {
-    const ecoPrice = getRandomPrice(4, 6);
-    const comfPrice = getRandomPrice(9, 14);
-    
+    // Statik qiymətlər - demo zamanı rəqəmlərin dəyişməməsi daha peşəkar görünür
+    const ecoPrice = "5.50";
+    const comfPrice = "8.20";
+
     let msg = "";
     let inputsHTML = "";
-    
+
     if (data.ticketType === 'arrival') {
       // User is arriving TO a venue. So FROM is locked as Venue, TO is active.
       msg = t.arrivalMsg(data.eventTime, data.venueName);
@@ -352,8 +357,26 @@
 
     container.innerHTML = `
       <div class="st-header">
-        <h3>🚕 Smart Transfer</h3>
-        <button class="st-close" id="st-close-btn">${t.close}</button>
+        <h3 style="display: flex; align-items: center; gap: 8px; margin: 0; font-size: 18px; font-weight: 700;">
+          <svg width="28" height="26" viewBox="0 0 30 28" fill="#F4AC10">
+            <path d="M 0 6 C 0 2 6 2 6 6 L 6 16 L 0 16 Z" />
+            <path d="M 12 10 C 12 6 18 6 18 10 L 18 16 L 12 16 Z" />
+            <path d="M 24 6 C 24 2 30 2 30 6 L 30 16 L 24 16 Z" />
+            <rect x="6" y="16" width="6" height="6" />
+            <rect x="18" y="16" width="6" height="6" />
+            <rect x="0" y="22" width="6" height="6" />
+            <rect x="12" y="22" width="6" height="6" />
+            <rect x="24" y="22" width="6" height="6" />
+          </svg>
+          <span style="letter-spacing: 0;">Baku Taxi</span>
+        </h3>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="background: #F4AC10; color: #6a2a5b; padding: 4px 10px; border-radius: 20px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            1000
+          </span>
+          <button class="st-close" id="st-close-btn">${t.close}</button>
+        </div>
       </div>
       <div class="st-body">
         <div class="st-message">${msg}</div>
@@ -376,10 +399,10 @@
 
     // Events
     document.getElementById('st-close-btn').addEventListener('click', hidePlugin);
-    
+
     const tariffs = container.querySelectorAll('.st-tariff');
     tariffs.forEach(tar => {
-      tar.addEventListener('click', function() {
+      tar.addEventListener('click', function () {
         tariffs.forEach(t => t.classList.remove('selected'));
         this.classList.add('selected');
       });
@@ -394,15 +417,33 @@
         setTimeout(() => activeInput.style.borderColor = '', 1000);
         return;
       }
-      renderStep2();
+      renderStep2(data);
     });
   }
 
-  function renderStep2() {
+  function renderStep2(data) {
     container.innerHTML = `
       <div class="st-header">
-        <h3>🚕 Smart Transfer</h3>
-        <button class="st-close" id="st-close-btn">${t.close}</button>
+        <h3 style="display: flex; align-items: center; gap: 8px; margin: 0; font-size: 18px; font-weight: 700;">
+          <svg width="28" height="26" viewBox="0 0 30 28" fill="#F4AC10">
+            <path d="M 0 6 C 0 2 6 2 6 6 L 6 16 L 0 16 Z" />
+            <path d="M 12 10 C 12 6 18 6 18 10 L 18 16 L 12 16 Z" />
+            <path d="M 24 6 C 24 2 30 2 30 6 L 30 16 L 24 16 Z" />
+            <rect x="6" y="16" width="6" height="6" />
+            <rect x="18" y="16" width="6" height="6" />
+            <rect x="0" y="22" width="6" height="6" />
+            <rect x="12" y="22" width="6" height="6" />
+            <rect x="24" y="22" width="6" height="6" />
+          </svg>
+          <span style="letter-spacing: 0;">Baku Taxi</span>
+        </h3>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="background: #F4AC10; color: #6a2a5b; padding: 4px 10px; border-radius: 20px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            1000
+          </span>
+          <button class="st-close" id="st-close-btn">${t.close}</button>
+        </div>
       </div>
       <div class="st-body st-loading">
         <div class="st-spinner"></div>
@@ -412,19 +453,51 @@
     document.getElementById('st-close-btn').addEventListener('click', hidePlugin);
 
     setTimeout(() => {
-      renderStep3();
+      renderStep3(data);
     }, 1500);
   }
 
-  function renderStep3() {
+  function renderStep3(data) {
     const driver = mockDrivers[Math.floor(Math.random() * mockDrivers.length)];
-    let remainingMins = driver.eta;
-    let remainingSecs = 0;
+
+    let taxiTime = "";
+    if (data && data.eventTime) {
+      const [hours, minutes] = data.eventTime.split(':').map(Number);
+      let date = new Date();
+      date.setHours(hours);
+      date.setMinutes(minutes);
+
+      if (data.ticketType === 'arrival') {
+        date.setMinutes(date.getMinutes() + 5); // 5 minutes after arrival
+      } else {
+        date.setMinutes(date.getMinutes() - 60); // 1 hour before departure
+      }
+
+      taxiTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    }
 
     container.innerHTML = `
       <div class="st-header">
-        <h3>🚕 Smart Transfer</h3>
-        <button class="st-close" id="st-close-btn">${t.close}</button>
+        <h3 style="display: flex; align-items: center; gap: 8px; margin: 0; font-size: 18px; font-weight: 700;">
+          <svg width="28" height="26" viewBox="0 0 30 28" fill="#F4AC10">
+            <path d="M 0 6 C 0 2 6 2 6 6 L 6 16 L 0 16 Z" />
+            <path d="M 12 10 C 12 6 18 6 18 10 L 18 16 L 12 16 Z" />
+            <path d="M 24 6 C 24 2 30 2 30 6 L 30 16 L 24 16 Z" />
+            <rect x="6" y="16" width="6" height="6" />
+            <rect x="18" y="16" width="6" height="6" />
+            <rect x="0" y="22" width="6" height="6" />
+            <rect x="12" y="22" width="6" height="6" />
+            <rect x="24" y="22" width="6" height="6" />
+          </svg>
+          <span style="letter-spacing: 0;">Baku Taxi</span>
+        </h3>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="background: #F4AC10; color: #6a2a5b; padding: 4px 10px; border-radius: 20px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            1000
+          </span>
+          <button class="st-close" id="st-close-btn">${t.close}</button>
+        </div>
       </div>
       <div class="st-body">
         <h4 style="margin-top:0; color: #0f172a; text-align: center;">${t.driverFound}</h4>
@@ -438,34 +511,14 @@
             <span class="st-car-plate">${driver.plate}</span>
           </div>
           <div class="st-eta-box">
-            <div>${t.arrivingIn}</div>
-            <div class="st-eta-time" id="st-timer">${remainingMins}:00</div>
+            <div>${t.scheduledFor}</div>
+            <div class="st-eta-time">${taxiTime}</div>
           </div>
         </div>
       </div>
     `;
 
     document.getElementById('st-close-btn').addEventListener('click', hidePlugin);
-
-    const timerEl = document.getElementById('st-timer');
-    
-    if (currentCountdownInterval) clearInterval(currentCountdownInterval);
-    
-    currentCountdownInterval = setInterval(() => {
-      if (remainingSecs === 0) {
-        if (remainingMins === 0) {
-          clearInterval(currentCountdownInterval);
-          timerEl.textContent = "0:00";
-          return;
-        }
-        remainingMins--;
-        remainingSecs = 59;
-      } else {
-        remainingSecs--;
-      }
-      
-      timerEl.textContent = `${remainingMins}:${remainingSecs.toString().padStart(2, '0')}`;
-    }, 1000);
   }
 
   function showPlugin(data) {
